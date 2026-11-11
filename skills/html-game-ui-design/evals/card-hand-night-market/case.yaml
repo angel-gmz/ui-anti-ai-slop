@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: card-hand-night-market
+expected_outcome: |
+  A single self-contained round.html for a food-stall deckbuilder. Cards have a consistent anatomy
+  (cost, name, type, rules text, value) and legible rules text; the focused or hovered card comes
+  forward and is fully readable; unaffordable cards are distinguishable from playable ones by more
+  than color. Heat, piles, coins, reputation and waiting customers are shown with drawn icons and
+  tabular numerals, and End Turn is the clearest action on screen. Playing a card spends heat and
+  visibly removes the card. The visual direction is stated and tied to a night-market food stall, not
+  dark navy panels with neon glass cards. Keyboard operation works with a visible focus.

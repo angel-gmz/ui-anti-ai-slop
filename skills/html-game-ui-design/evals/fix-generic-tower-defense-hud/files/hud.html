@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marrowgate - Tower Defense</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #fff; overflow: hidden; height: 100vh; }
+  #game { position: absolute; inset: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 40%, #1e293b, #0f172a); }
+  .panel { position: absolute; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); transition: all 0.3s ease; }
+  .panel:hover { transform: translateY(-2px); box-shadow: 0 14px 50px rgba(0,0,0,0.5); }
+  #stats { top: 16px; left: 16px; width: 240px; }
+  #wave { top: 16px; right: 16px; width: 220px; text-align: center; }
+  #towers { bottom: 16px; left: 16px; display: flex; gap: 12px; }
+  #log { bottom: 16px; right: 16px; width: 260px; font-size: 13px; color: #94a3b8; }
+  h1 { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #8b5cf6, #3b82f6); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 20px rgba(139,92,246,0.5); }
+  .stat { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+  .bar { height: 10px; background: rgba(255,255,255,0.1); border-radius: 9999px; overflow: hidden; margin-bottom: 12px; }
+  .bar-fill { height: 100%; width: 72%; background: linear-gradient(90deg, #ef4444, #22c55e); border-radius: 9999px; transition: all 0.3s ease; }
+  .tower-card { width: 84px; padding: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+  .tower-card:hover { transform: translateY(-4px); border-color: #8b5cf6; box-shadow: 0 0 20px rgba(139,92,246,0.6); }
+  .tower-card .icon { font-size: 28px; }
+  .tower-card .cost { font-size: 12px; color: #fbbf24; margin-top: 4px; }
+  .btn { margin-top: 12px; width: 100%; padding: 10px 16px; border: none; border-radius: 9999px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 0 16px rgba(236,72,153,0.5); outline: none; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 0 24px rgba(236,72,153,0.8); }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 9999px; background: rgba(139,92,246,0.2); color: #c4b5fd; font-size: 12px; }
+</style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <h1>✨ Marrowgate ✨</h1>
+
+  <div class="panel" id="stats">
+    <div class="stat"><span>❤️ Health: </span><span id="hp-text">72/100</span></div>
+    <div class="bar"><div class="bar-fill" id="hp-fill"></div></div>
+    <div class="stat"><span>🪙 Gold: </span><span id="gold">340</span></div>
+    <div class="stat"><span>⭐ Score: </span><span id="score">12850</span></div>
+  </div>
+
+  <div class="panel" id="wave">
+    <span class="badge">Wave</span>
+    <div style="font-size:32px;font-weight:800" id="wave-num">7 / 20</div>
+    <div style="font-size:12px;color:#94a3b8">Next wave in <span id="wave-timer">12</span>s</div>
+    <button class="btn" id="start-wave">🚀 Start Wave</button>
+  </div>
+
+  <div class="panel" id="towers">
+    <div class="tower-card" data-tower="archer" onclick="selectTower('archer')"><div class="icon">🏹</div><div>Archer</div><div class="cost">🪙 50</div></div>
+    <div class="tower-card" data-tower="cannon" onclick="selectTower('cannon')"><div class="icon">💣</div><div>Cannon</div><div class="cost">🪙 120</div></div>
+    <div class="tower-card" data-tower="mage" onclick="selectTower('mage')"><div class="icon">🔮</div><div>Mage</div><div class="cost">🪙 200</div></div>
+    <div class="tower-card" data-tower="frost" onclick="selectTower('frost')"><div class="icon">❄️</div><div>Frost</div><div class="cost">🪙 150</div></div>
+  </div>
+
+  <div class="panel" id="log">
+    <div>Welcome to Marrowgate! Defend your kingdom.</div>
+    <div>Wave 6 cleared! +80 gold</div>
+    <div>Archer tower built.</div>
+  </div>
+
+<script>
+  // --- game state hooks: the game loop calls these; keep the ids and function names ---
+  const state = { hp: 72, maxHp: 100, gold: 340, score: 12850, wave: 7, waves: 20, selected: null };
+  function setHealth(hp) { state.hp = hp; document.getElementById('hp-text').textContent = hp + '/' + state.maxHp; document.getElementById('hp-fill').style.width = (hp / state.maxHp * 100) + '%'; }
+  function setGold(g) { state.gold = g; document.getElementById('gold').textContent = g; }
+  function setScore(s) { state.score = s; document.getElementById('score').textContent = s; }
+  function setWave(w) { state.wave = w; document.getElementById('wave-num').textContent = w + ' / ' + state.waves; }
+  function setWaveTimer(t) { document.getElementById('wave-timer').textContent = t; }
+  function selectTower(id) { state.selected = id; document.querySelectorAll('.tower-card').forEach(c => c.style.borderColor = c.dataset.tower === id ? '#8b5cf6' : ''); }
+  function logEvent(msg) { const d = document.createElement('div'); d.textContent = msg; document.getElementById('log').appendChild(d); }
+  document.getElementById('start-wave').addEventListener('click', () => { setWave(state.wave + 1); logEvent('Wave ' + state.wave + ' incoming!'); });
+
+  // demo: enemies leak through now and then
+  setInterval(() => { if (state.hp > 0) setHealth(Math.max(0, state.hp - 4)); setGold(state.gold + 10); setScore(state.score + 150); }, 2500);
+</script>
+</body>
+</html>

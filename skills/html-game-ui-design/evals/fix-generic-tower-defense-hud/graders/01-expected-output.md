@@ -1,0 +1,7 @@
+---
+type: llm
+focus: trace
+weight: 1
+---
+
+The result matches this description: A rewritten hud.html that keeps the existing game hooks working (the functions setHealth, setGold, setScore, setWave, setWaveTimer, selectTower and logEvent still exist and still update the screen, and the start-wave control still works). The reply explains what made the original look generic and states a visual direction specific to a city built inside a giant beast's skeleton. The result has no emoji icons, no blurred glass panels, no purple gradients or gradient text, and no generic sans as its typeface; tower choices are real buttons that can be focused and selected from the keyboard; health is shown by shape with feedback on damage; and the layout no longer consists of four equal panels in the four corners. The reply is in Spanish.

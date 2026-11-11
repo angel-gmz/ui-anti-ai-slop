@@ -1,0 +1,7 @@
+---
+type: llm
+focus: trace
+weight: 1
+---
+
+The result matches this description: A single self-contained pantallas.html, laid out for a phone in portrait, with a level-select screen (12 levels in 3 worlds; locked, available, current and completed states that are distinguishable without relying on color alone; 1 to 3 stars on completed levels) and a level-complete screen where stars and coins arrive as a staged sequence rather than a static card. Touch targets are large, primary actions are within thumb reach, and nothing depends on hover. Type is large and highly legible for children. The visual direction is stated and specific to the game's food-sharing theme, with drawn icons (no emoji stars or trophies) and no candy-gloss gradient buttons. Interface text is in Spanish.

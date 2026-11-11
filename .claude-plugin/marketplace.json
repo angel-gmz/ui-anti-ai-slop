@@ -1,0 +1,11 @@
+{
+  "name": "ui-anti-ai-slop",
+  "owner": { "name": "angel-gmz" },
+  "plugins": [
+    {
+      "name": "game-ui-anti-slop",
+      "source": "./",
+      "description": "Skills for designing HTML game interfaces that do not look like generic AI output."
+    }
+  ]
+}

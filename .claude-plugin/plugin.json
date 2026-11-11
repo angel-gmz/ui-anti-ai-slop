@@ -1,0 +1,10 @@
+{
+  "name": "game-ui-anti-slop",
+  "description": "Skills for designing HTML game interfaces (HUDs, menus, inventories, dialogue, cards) that look like part of the game instead of a generic AI-generated web app.",
+  "version": "0.1.0",
+  "author": { "name": "angel-gmz", "url": "https://github.com/angel-gmz" },
+  "homepage": "https://github.com/angel-gmz/ui-anti-ai-slop",
+  "repository": "https://github.com/angel-gmz/ui-anti-ai-slop",
+  "license": "MIT",
+  "keywords": ["game-ui", "hud", "html5-games", "design", "anti-slop"]
+}
